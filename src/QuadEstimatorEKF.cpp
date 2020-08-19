@@ -191,21 +191,29 @@ MatrixXf QuadEstimatorEKF::GetRbgPrime(float roll, float pitch, float yaw)
   // INPUTS: 
   //   roll, pitch, yaw: Euler angles at which to calculate RbgPrime
   //   
-  // OUTPUT:
-  //   return the 3x3 matrix representing the partial derivative at the given point
+    // OUTPUT:
+    //   return the 3x3 matrix representing the partial derivative at the given point
 
-  // HINTS
-  // - this is just a matter of putting the right sin() and cos() functions in the right place.
-  //   make sure you write clear code and triple-check your math
-  // - You can also do some numerical partial derivatives in a unit test scheme to check 
-  //   that your calculations are reasonable
+    // HINTS
+    // - this is just a matter of putting the right sin() and cos() functions in the right place.
+    //   make sure you write clear code and triple-check your math
+    // - You can also do some numerical partial derivatives in a unit test scheme to check
+    //   that your calculations are reasonable
 
-  ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+    ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+    RbgPrime(0, 0) = -cos(pitch) * sin(yaw);
+    RbgPrime(0, 1) = -sin(roll) * sin(pitch) * sin(yaw) - cos(roll) * cos(yaw);
+    RbgPrime(0, 2) = -cos(roll) * sin(pitch) * sin(yaw) + sin(roll) * cos(yaw);
+
+    RbgPrime(1, 0) = cos(pitch) * cos(yaw);
+    RbgPrime(1, 1) = sin(roll) * sin(pitch) * cos(yaw) + cos(roll) * sin(yaw);
+    RbgPrime(1, 2) = cos(roll) * sin(pitch) * cos(yaw) + sin(roll) * sin(yaw);
 
 
-  /////////////////////////////// END STUDENT CODE ////////////////////////////
 
-  return RbgPrime;
+    /////////////////////////////// END STUDENT CODE ////////////////////////////
+
+    return RbgPrime;
 }
 
 void QuadEstimatorEKF::Predict(float dt, V3F accel, V3F gyro)
@@ -237,21 +245,36 @@ void QuadEstimatorEKF::Predict(float dt, V3F accel, V3F gyro)
   //   2) Once all the matrices are there, write the equation to update cov.
   //
   // - if you want to transpose a matrix in-place, use A.transposeInPlace(), not A = A.transpose()
-  // 
+    //
 
-  // we'll want the partial derivative of the Rbg matrix
-  MatrixXf RbgPrime = GetRbgPrime(rollEst, pitchEst, ekfState(6));
+    // we'll want the partial derivative of the Rbg matrix
+    MatrixXf RbgPrime = GetRbgPrime(rollEst, pitchEst, ekfState(6));
 
-  // we've created an empty Jacobian for you, currently simply set to identity
-  MatrixXf gPrime(QUAD_EKF_NUM_STATES, QUAD_EKF_NUM_STATES);
-  gPrime.setIdentity();
+    // we've created an empty Jacobian for you, currently simply set to identity
+    MatrixXf gPrime(QUAD_EKF_NUM_STATES, QUAD_EKF_NUM_STATES);
+    gPrime.setIdentity();
 
-  ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+    ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+    gPrime(0, 3) = dt;
+    gPrime(1, 4) = dt;
+    gPrime(2, 5) = dt;
+
+    VectorXf u(3);
+    u << accel.x, accel.y, accel.z;
+
+    VectorXf sub_vec(3);
+    sub_vec = RbgPrime * u * dt;
+
+    gPrime(3, 6) = sub_vec(0);
+    gPrime(4, 6) = sub_vec(1);
+    gPrime(5, 6) = sub_vec(2);
+
+    ekfCov = gPrime * ekfCov * gPrime.transpose() + Q; // Prediction of covariance matrix
 
 
-  /////////////////////////////// END STUDENT CODE ////////////////////////////
+    /////////////////////////////// END STUDENT CODE ////////////////////////////
 
-  ekfState = newState;
+    ekfState = newState;
 }
 
 void QuadEstimatorEKF::UpdateFromGPS(V3F pos, V3F vel)
