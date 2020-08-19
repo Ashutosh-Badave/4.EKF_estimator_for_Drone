@@ -40,7 +40,7 @@ Used the quaternion class as per suggested and took help from section 7.2.1 Nonl
 
 ### 3. Prediction step ###
 I have implemented the code as per explained in section 7.2 of [Estimation for Quadrotors](https://www.overleaf.com/read/vymfngphcccj).
-First I have rotated attitude using accel and saved in matrix and then prediction state is calculated as below:
+1. I have rotated attitude using accel and saved in matrix and then prediction state is calculated as below:
 
 <pre>
 <code>
@@ -55,3 +55,25 @@ V3F Acc_mat = attitude.Rotate_BtoI(accel);
 </code>
 </pre>
 
+2. Modified  `Predict()` function by Creating helping matrix and jacobian as per equation provided in section 7.2.
+
+<pre>
+<code>
+    gPrime(0, 3) = dt;
+    gPrime(1, 4) = dt;
+    gPrime(2, 5) = dt;
+
+    VectorXf u(3);
+    u << accel.x, accel.y, accel.z;
+
+    VectorXf sub_vec(3);
+    sub_vec = RbgPrime * u * dt;
+
+    gPrime(3, 6) = sub_vec(0);
+    gPrime(4, 6) = sub_vec(1);
+    gPrime(5, 6) = sub_vec(2);
+
+    ekfCov = gPrime * ekfCov * gPrime.transpose() + Q; // Prediction of covariance matrix
+
+</code>
+</pre>
