@@ -39,3 +39,19 @@ Used the quaternion class as per suggested and took help from section 7.2.1 Nonl
 </pre>
 
 ### 3. Prediction step ###
+I have implemented the code as per explained in section 7.2 of [Estimation for Quadrotors](https://www.overleaf.com/read/vymfngphcccj).
+First I have rotated attitude using accel and saved in matrix and then prediction state is calculated as below:
+
+<pre>
+<code>
+V3F Acc_mat = attitude.Rotate_BtoI(accel);
+    predictedState[0] = curState[0] + dt * curState[3];
+    predictedState[1] = curState[1] + dt * curState[4];
+    predictedState[2] = curState[2] + dt * curState[5];
+    predictedState[3] = curState[3] + dt * Acc_mat[0];
+    predictedState[4] = curState[4] + dt * Acc_mat[1];
+    predictedState[5] = curState[5] + dt * Acc_mat[2] - dt * 9.81f;
+    
+</code>
+</pre>
+
