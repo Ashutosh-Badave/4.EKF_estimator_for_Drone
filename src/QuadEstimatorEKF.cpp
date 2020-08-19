@@ -158,21 +158,27 @@ VectorXf QuadEstimatorEKF::PredictState(VectorXf curState, float dt, V3F accel, 
   // OUTPUT:
   //   return the predicted state as a vector
 
-  // HINTS 
-  // - dt is the time duration for which you should predict. It will be very short (on the order of 1ms)
-  //   so simplistic integration methods are fine here
-  // - we've created an Attitude Quaternion for you from the current state. Use 
-  //   attitude.Rotate_BtoI(<V3F>) to rotate a vector from body frame to inertial frame
-  // - the yaw integral is already done in the IMU update. Be sure not to integrate it again here
+    // HINTS
+    // - dt is the time duration for which you should predict. It will be very short (on the order of 1ms)
+    //   so simplistic integration methods are fine here
+    // - we've created an Attitude Quaternion for you from the current state. Use
+    //   attitude.Rotate_BtoI(<V3F>) to rotate a vector from body frame to inertial frame
+    // - the yaw integral is already done in the IMU update. Be sure not to integrate it again here
 
-  Quaternion<float> attitude = Quaternion<float>::FromEuler123_RPY(rollEst, pitchEst, curState(6));
+    Quaternion<float> attitude = Quaternion<float>::FromEuler123_RPY(rollEst, pitchEst, curState(6));
 
-  ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+    ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+    V3F Acc_mat = attitude.Rotate_BtoI(accel);
+    predictedState[0] = curState[0] + dt * curState[3];
+    predictedState[1] = curState[1] + dt * curState[4];
+    predictedState[2] = curState[2] + dt * curState[5];
+    predictedState[3] = curState[3] + dt * Acc_mat[0];
+    predictedState[4] = curState[4] + dt * Acc_mat[1];
+    predictedState[5] = curState[5] + dt * Acc_mat[2] - dt * 9.81f;
 
+    /////////////////////////////// END STUDENT CODE ////////////////////////////
 
-  /////////////////////////////// END STUDENT CODE ////////////////////////////
-
-  return predictedState;
+    return predictedState;
 }
 
 MatrixXf QuadEstimatorEKF::GetRbgPrime(float roll, float pitch, float yaw)
