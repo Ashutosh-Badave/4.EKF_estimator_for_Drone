@@ -77,3 +77,5 @@ V3F Acc_mat = attitude.Rotate_BtoI(accel);
 
 </code>
 </pre>
+
+3. Tuned QPosXYStd and QVelXYStd for better results.
