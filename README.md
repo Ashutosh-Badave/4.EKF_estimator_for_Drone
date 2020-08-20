@@ -10,8 +10,8 @@ This README is broken down into the following sections:
 
  - [Setup](#setup) - the environment and code setup required to get started and a brief overview of the project structure
  - [The Tasks](#the-tasks) - the tasks you will need to complete for the project
- - [Tips and Tricks](#tips-and-tricks) - some additional tips and tricks you may find useful along the way
- - [Submission](#submission) - overview of the requirements for your project submission
+ - [Contributor](#Contributors) - Thank note for initial developers.
+ 
 
 
 ## Setup ##
@@ -70,4 +70,4 @@ Once again, I have developed my estimator in pieces.  How I completed those step
 
 ## Contributors ##
 
-Thanks to Fotokite for the initial development of the project code and simulator.
+Thanks to Udacity and Fotokite for the initial development of the project code and simulator.
