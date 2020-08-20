@@ -285,20 +285,29 @@ void QuadEstimatorEKF::UpdateFromGPS(V3F pos, V3F vel)
   z(2) = pos.z;
   z(3) = vel.x;
   z(4) = vel.y;
-  z(5) = vel.z;
+    z(5) = vel.z;
 
-  MatrixXf hPrime(6, QUAD_EKF_NUM_STATES);
-  hPrime.setZero();
+    MatrixXf hPrime(6, QUAD_EKF_NUM_STATES);
+    hPrime.setZero();
 
-  // GPS UPDATE
-  // Hints: 
-  //  - The GPS measurement covariance is available in member variable R_GPS
-  //  - this is a very simple update
-  ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+    // GPS UPDATE
+    // Hints:
+    //  - The GPS measurement covariance is available in member variable R_GPS
+    //  - this is a very simple update
+    ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+    hPrime(0, 0) = 1.0;
+    hPrime(1, 1) = 1.0;
+    hPrime(2, 2) = 1.0;
+    hPrime(3, 3) = 1.0;
+    hPrime(4, 4) = 1.0;
+    hPrime(5, 5) = 1.0;
 
-  /////////////////////////////// END STUDENT CODE ////////////////////////////
+    zFromX = hPrime * ekfState;
 
-  Update(z, hPrime, R_GPS, zFromX);
+
+    /////////////////////////////// END STUDENT CODE ////////////////////////////
+
+    Update(z, hPrime, R_GPS, zFromX);
 }
 
 void QuadEstimatorEKF::UpdateFromMag(float magYaw)
