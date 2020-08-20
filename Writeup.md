@@ -3,14 +3,14 @@ Below I have explained how I tackled all the points, implemented the code and tu
 
 Outline:
 
-- [Step 1: Sensor Noise](#1.-Sensor-noise)
-- [Step 2: Attitude Estimation](#2.-Attitude-Estimation)
-- [Step 3: Prediction Step](#3.-Prediction-step)
-- [Step 4: Magnetometer Update](#4.-Magnetometer-Update)
-- [Step 5: Closed Loop + GPS Update](#5.-Closed-Loop-and-GPS-Update)
+- [Step 1: Sensor Noise](#1-Sensor-noise)
+- [Step 2: Attitude Estimation](#2-Attitude-Estimation)
+- [Step 3: Prediction Step](#3-Prediction-step)
+- [Step 4: Magnetometer Update](#4-Magnetometer-Update)
+- [Step 5: Closed Loop + GPS Update](#5-Closed-Loop-and-GPS-Update)
 - Step 6: Adding Your Controller
 
-### 1. Sensor noise ###
+### 1 Sensor noise ###
 1. Started running the simulator with senario 6_noisysensors. 
 2. Recorded the GPS and Accelerometer data in graph1 and graph2 files respectively.
 3. Calculated the mean and standard deviation using below mathematical formulas:
@@ -23,7 +23,7 @@ Std_dev = pow(sum(pow(point -mean,2))/N,0.5)
 4. changed the values of `MeasuredStdDev_GPSPosXY` and `MeasuredStdDev_AccelXY` in `config/6_Sensornoise.txt`.
 5. After running the simulator again, graphs turned green after few sec and results were passed.
 
-### 2. Attitude Estimation ###
+### 2 Attitude Estimation ###
 Used the quaternion class as per suggested and took help from section 7.2.1 Nonliear Complementary Filter of 
 [Estimation for Quadrotors](https://www.overleaf.com/read/vymfngphcccj). Below is code snippet:  
 
@@ -38,7 +38,7 @@ Used the quaternion class as per suggested and took help from section 7.2.1 Nonl
 </code>
 </pre>
 
-### 3. Prediction step ###
+### 3 Prediction step ###
 I have implemented the code as per explained in section 7.2 of [Estimation for Quadrotors](https://www.overleaf.com/read/vymfngphcccj).
 1. I have rotated attitude using accel and saved in matrix and then prediction state is calculated as below:
 
@@ -80,7 +80,7 @@ V3F Acc_mat = attitude.Rotate_BtoI(accel);
 
 3. Tuned QPosXYStd and QVelXYStd for better results.
 
-### 4. Magnetometer Update ###
+### 4 Magnetometer Update ###
 1. After running the realistic IMU scenario`10_MagUpdate`, without magnetometer update, estimated yaw was drifting away.
 For better performance I tuned QYawStd to 0.065. But still no great results.
 2. Furthermore, I have implemented `UpdateFromMag()``function, by considering the difference of estimated yaw and measured yaw. 
@@ -105,7 +105,7 @@ Done the normalization of difference and updated the yaw value as shown below:
 
 ![mag good](images/mag-good-solution.png)
 
-###5. Closed Loop and GPS Update ###
+### 5 Closed Loop and GPS Update ###
 
 1. After removing idealEstimator and before implementation of GPS update function.
 
