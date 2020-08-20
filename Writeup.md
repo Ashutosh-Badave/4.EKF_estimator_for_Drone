@@ -8,7 +8,7 @@ Outline:
 - [Step 3: Prediction Step](#3-Prediction-step)
 - [Step 4: Magnetometer Update](#4-Magnetometer-Update)
 - [Step 5: Closed Loop + GPS Update](#5-Closed-Loop-and-GPS-Update)
-- Step 6: Adding Your Controller
+- [Step 6: Adding my PID Controller](#6-Adding-my-PID-Controller)
 
 ### 1 Sensor noise ###
 1. Started running the simulator with senario 6_noisysensors. 
@@ -122,3 +122,7 @@ in section 7.3.1 in [Estimation for Quadrotors](https://www.overleaf.com/read/vy
 4. Also tuned the process noise model again for better performance of drone, which shown below:
 
 <pre align="center"><img src="images/Final_output_estimator.gif"/></pre>
+
+### 6 Adding my PID Controller ###
+I have added my own developed PID controller for quad , also added the configparam file and tested the estimator output.
+It has provided the same results without changing anything.
