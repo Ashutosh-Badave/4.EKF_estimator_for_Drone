@@ -306,21 +306,31 @@ void QuadEstimatorEKF::UpdateFromMag(float magYaw)
   VectorXf z(1), zFromX(1);
   z(0) = magYaw;
 
-  MatrixXf hPrime(1, QUAD_EKF_NUM_STATES);
-  hPrime.setZero();
+    MatrixXf hPrime(1, QUAD_EKF_NUM_STATES);
+    hPrime.setZero();
 
-  // MAGNETOMETER UPDATE
-  // Hints: 
-  //  - Your current estimated yaw can be found in the state vector: ekfState(6)
-  //  - Make sure to normalize the difference between your measured and estimated yaw
-  //    (you don't want to update your yaw the long way around the circle)
-  //  - The magnetomer measurement covariance is available in member variable R_Mag
-  ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+    // MAGNETOMETER UPDATE
+    // Hints:
+    //  - Your current estimated yaw can be found in the state vector: ekfState(6)
+    //  - Make sure to normalize the difference between your measured and estimated yaw
+    //    (you don't want to update your yaw the long way around the circle)
+    //  - The magnetomer measurement covariance is available in member variable R_Mag
+    ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+    // Current estimated yaw
+    zFromX(0) = ekfState(6);
 
+    // Update the hprime
+    hPrime(6) = 1.0f;
 
-  /////////////////////////////// END STUDENT CODE ////////////////////////////
+    // difference of yaw
+    MatrixXf Yaw_diff = z - zFromX;
 
-  Update(z, hPrime, R_Mag, zFromX);
+    // normalize yaw to -pi .. pi
+    if (Yaw_diff(0) > F_PI) z(0) -= 2.f * F_PI;
+    if (Yaw_diff(0) < -F_PI) z(0) += 2.f * F_PI;
+    /////////////////////////////// END STUDENT CODE ////////////////////////////
+
+    Update(z, hPrime, R_Mag, zFromX);
 }
 
 // Execute an EKF update step
