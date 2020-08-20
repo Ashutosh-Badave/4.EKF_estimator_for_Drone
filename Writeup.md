@@ -7,7 +7,7 @@ Outline:
 - [Step 2: Attitude Estimation](#2.-Attitude-Estimation)
 - [Step 3: Prediction Step](#3.-Prediction-step)
 - [Step 4: Magnetometer Update](#4.-Magnetometer-Update)
-- Step 5: Closed Loop + GPS Update
+- [Step 5: Closed Loop + GPS Update](#5.-Closed-Loop-and-GPS-Update)
 - Step 6: Adding Your Controller
 
 ### 1. Sensor noise ###
@@ -105,3 +105,20 @@ Done the normalization of difference and updated the yaw value as shown below:
 
 ![mag good](images/mag-good-solution.png)
 
+###5. Closed Loop and GPS Update ###
+
+1. After removing idealEstimator and before implementation of GPS update function.
+
+![mag good](images/Without_GPS_Update.png)
+
+2. Then, I have removed simulated IMU and considered realtime IMU, before tuning process noise, which changed the flight path drastically 
+as shown below:
+
+![mag good](images/without_tunning_process_noise_model.png)
+
+3. To make it work, firstly I have implemented GPS measurement function by taking reference of equations provided 
+in section 7.3.1 in [Estimation for Quadrotors](https://www.overleaf.com/read/vymfngphcccj).
+
+4. Also tuned the process noise model again for better performance of drone, which shown below:
+
+<pre align="center"><img src="images/Final_output_estimator.gif"/></pre>
