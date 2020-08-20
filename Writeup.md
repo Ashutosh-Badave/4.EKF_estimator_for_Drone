@@ -6,7 +6,7 @@ Outline:
 - [Step 1: Sensor Noise](#1.-Sensor-noise)
 - [Step 2: Attitude Estimation](#2.-Attitude-Estimation)
 - [Step 3: Prediction Step](#3.-Prediction-step)
-- Step 4: Magnetometer Update
+- [Step 4: Magnetometer Update](#4.-Magnetometer-Update)
 - Step 5: Closed Loop + GPS Update
 - Step 6: Adding Your Controller
 
@@ -79,3 +79,29 @@ V3F Acc_mat = attitude.Rotate_BtoI(accel);
 </pre>
 
 3. Tuned QPosXYStd and QVelXYStd for better results.
+
+### 4. Magnetometer Update ###
+1. After running the realistic IMU scenario`10_MagUpdate`, without magnetometer update, estimated yaw was drifting away.
+For better performance I tuned QYawStd to 0.065. But still no great results.
+2. Furthermore, I have implemented `UpdateFromMag()``function, by considering the difference of estimated yaw and measured yaw. 
+Done the normalization of difference and updated the yaw value as shown below:
+
+<pre><code>
+    // Current estimated yaw
+    zFromX(0) = ekfState(6);
+
+    // Update the hprime
+    hPrime(6) = 1.0f;
+
+    // difference of yaw
+    MatrixXf Yaw_diff = z - zFromX;
+
+    // normalize yaw to -pi .. pi
+    if (Yaw_diff(0) > F_PI) z(0) -= 2.f * F_PI;
+    if (Yaw_diff(0) < -F_PI) z(0) += 2.f * F_PI;
+</code></pre>
+
+3. Again done the tuning of QYawStd to 0.065 which provided better results similar to below:
+
+![mag good](images/mag-good-solution.png)
+
