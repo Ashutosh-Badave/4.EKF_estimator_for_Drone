@@ -1,8 +1,9 @@
 # EKF Estimator for Drone #
 
 Welcome to the EKF estimation for Drone project. This is the forth and last project in Aerial Vehicle Engineer NanoDegree program at Udacity. 
-In this project, I have developed the estimation portion of the controller used in the CPP simulator.  
-By the end of the project, I have simulated quad which is flying with your estimator and my custom controller (from the previous project)!
+In this project, I have developed the estimation portion of the controller used in the C++ simulator.  
+
+Once again, I have developed my estimator in pieces.  How I completed those steps and successfully designed estimator is explained in [writeup file](Writeup.md) and combined both own controller software with estimator software to peform pre-defined trajectory follower drone as shown below.
 
 <pre align="center"><img src="images/Final_output_estimator.gif"/></pre>
 
@@ -63,10 +64,6 @@ SimIMU.GyroStd = 0,0,0
 
 This configuration tells us that the simulator is only using an IMU and the sensor data will have no noise.  You will notice that for each simulator these parameters will change slightly as additional sensors are being used and the noise behavior of the sensors change.
 
-
-## The Tasks ##
-
-Once again, I have developed my estimator in pieces.  How I completed those steps and successfully designed estimator is explained in [writeup file](Writeup.md)
 
 ## Contributors ##
 
