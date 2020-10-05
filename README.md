@@ -3,7 +3,7 @@
 Welcome to the EKF estimation for Drone project. This is the forth and last project in Aerial Vehicle Engineer NanoDegree program at Udacity. 
 In this project, I have developed the estimation portion of the controller used in the C++ simulator.  
 
-Once again, I have developed my estimator in pieces.  How I completed those steps and successfully designed estimator is explained in [writeup file](Writeup.md) and combined both own controller software with estimator software to peform pre-defined trajectory follower drone as shown below.
+Once again, I have developed my estimator in pieces.  How I completed those steps and successfully designed estimator is explained in [writeup file](Writeup.md) and combined PID controller (previous project!) with EKF estimator to peform pre-defined trajectory follower drone as shown below.
 
 <pre align="center"><img src="images/Final_output_estimator.gif"/></pre>
 
